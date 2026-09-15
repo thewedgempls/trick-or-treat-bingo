@@ -307,7 +307,7 @@ async function startGame(){
     // Soft, browser-only reminder — the real one-response limit is enforced by the Google Form itself.
     state.marks = JSON.parse(localRecord).marks || {};
     state.submitted = true;
-    lockedBanner.textContent = `This browser already sent a submission for ${email}. If that was you, you're done — Google's form enforces one response per signed-in account regardless of this device.`;
+    lockedBanner.textContent = `This browser already sent a submission for ${email}. If that was you, you're done!`;
     lockedBanner.classList.remove('hidden');
     submitBtn.disabled = true;
     submitBtn.textContent = 'Already submitted from this device';
