@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Block Bingo — Halloween Trick-or-Treat</title>
+<title>Trick-or-Treat Bingo 2026 — The Wedge Neighborhood</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,700;9..144,900&family=Space+Grotesk:wght@400;500;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 <style>
@@ -157,9 +157,9 @@
 </head>
 <body>
 <div class="wrap">
-  <p class="eyebrow">Neighborhood Trick-or-Treat</p>
-  <h1>Block Bingo</h1>
-  <p class="sub">Every card is shuffled differently. Mark a square by logging the street address where you spotted it — one submission per email.</p>
+  <p class="eyebrow">The Wedge Neighborhood</p>
+  <h1>Trick-or-Treat Bingo 2026</h1>
+  <p class="sub">Your card's one-of-a-kind — no two trick-or-treaters get the same board. Spot a square out there? Note the street where you caught it. One card per person, so make your porch stops count!</p>
 
   <div id="entryPanel" class="card-panel">
     <label for="nameInput">Your name</label>
@@ -181,7 +181,6 @@
     <p class="note" style="margin-top:10px;" id="marksNote"></p>
   </div>
 
-  <p class="note">Responses are collected in the organizer's Google Form / linked Sheet — there's no in-app organizer view.</p>
 </div>
 
 <div id="modalRoot"></div>
@@ -216,7 +215,6 @@ const ITEMS = [
 const FORM_BASE = "https://docs.google.com/forms/d/e/1FAIpQLScxQnwoAfjDvnooHTN_Vp2deg61gKcUcshndMSGCn42EvTyGw/viewform";
 const ENTRY = {
   name: "entry.1398818692",
-  email: "entry.1941749188",
   bingoCount: "entry.832615057",
   addresses: "entry.364633843"
 };
@@ -399,7 +397,6 @@ submitBtn.addEventListener('click', () => {
   const params = new URLSearchParams();
   params.set('usp', 'pp_url');
   params.set(ENTRY.name, state.name);
-  params.set(ENTRY.email, state.email);
   params.set(ENTRY.bingoCount, String(count));
   params.set(ENTRY.addresses, addressesText);
 
