@@ -31,6 +31,10 @@
     min-height:100vh;
     padding:24px 16px 60px;
   }
+  @media (max-width:420px){
+    body{padding:20px 10px 48px;}
+    .card-panel{padding:16px;}
+  }
   .wrap{max-width:520px;margin:0 auto;}
   .eyebrow{
     font-family:'JetBrains Mono', monospace;
@@ -69,7 +73,7 @@
     padding:11px 12px;
     color:var(--bone);
     font-family:'Space Grotesk',sans-serif;
-    font-size:15px;
+    font-size:16px;
     margin-bottom:14px;
   }
   input:focus{outline:2px solid var(--pumpkin);outline-offset:1px;}
@@ -92,22 +96,24 @@
     padding:6px 16px;
   }
   .grid{
-    display:grid;grid-template-columns:repeat(5,1fr);gap:6px;margin-bottom:16px;
+    display:grid;grid-template-columns:repeat(5,1fr);gap:5px;margin-bottom:16px;
   }
   .cell{
     position:relative;
-    aspect-ratio:1/1;
+    aspect-ratio:1/1.08;
     background:var(--surface-raised);
     border:1px solid var(--line);
     border-radius:8px;
     display:flex;align-items:center;justify-content:center;
     text-align:center;
-    font-size:11px;
-    line-height:1.25;
-    padding:6px;
+    font-size:clamp(9px,2.6vw,11px);
+    line-height:1.2;
+    padding:4px;
     cursor:pointer;
     color:var(--bone-dim);
     transition:background .15s, border-color .15s;
+    overflow-wrap:break-word;
+    hyphens:auto;
   }
   .cell.free{
     background:rgba(232,114,44,.1);
@@ -136,7 +142,7 @@
   }
   .modal{
     background:var(--surface-raised);border:1px solid var(--line);
-    border-radius:14px 14px 0 0;padding:20px;width:100%;max-width:520px;
+    border-radius:14px 14px 0 0;padding:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom));width:100%;max-width:520px;
   }
   .modal p{font-size:13px;color:var(--bone-dim);margin:0 0 12px;}
   .modal-title{font-family:'Fraunces',serif;font-weight:700;font-size:18px;margin:0 0 6px;color:var(--bone);}
@@ -161,7 +167,7 @@
 <div class="wrap">
   <p class="eyebrow">The Wedge Neighborhood</p>
   <h1>Trick-or-Treat Bingo 2026</h1>
-  <p class="sub">Welcome to The Wedge Trick-or-Treat Bingo! Your bingo card is one-of-a-kind so no two trick-or-treaters get the same board. Spot a square out there? Note the street where you caught it! One card per person, so make your porch stops count!</p>
+  <p class="sub">Your card's one-of-a-kind — no two trick-or-treaters get the same board. Spot a square out there? Note the street where you caught it. One card per person, so make your porch stops count!</p>
 
   <div id="entryPanel" class="card-panel">
     <label for="nameInput">Your name</label>
