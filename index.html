@@ -136,18 +136,6 @@
   }
   .cell:disabled, .locked .cell{cursor:default;}
 
-  .modal-backdrop{
-    position:fixed;inset:0;background:rgba(10,12,17,.72);
-    display:flex;align-items:flex-end;justify-content:center;z-index:20;
-  }
-  .modal{
-    background:var(--surface-raised);border:1px solid var(--line);
-    border-radius:14px 14px 0 0;padding:20px;padding-bottom:calc(20px + env(safe-area-inset-bottom));width:100%;max-width:520px;
-  }
-  .modal p{font-size:13px;color:var(--bone-dim);margin:0 0 12px;}
-  .modal-title{font-family:'Fraunces',serif;font-weight:700;font-size:18px;margin:0 0 6px;color:var(--bone);}
-  .modal-actions{display:flex;gap:10px;margin-top:4px;}
-
   .note{font-size:12.5px;color:var(--bone-dim);line-height:1.5;}
   .locked-banner{
     background:rgba(232,114,44,.1);border:1px solid var(--pumpkin-dim);
@@ -168,7 +156,7 @@
   <p class="eyebrow">The Wedge Neighborhood</p>
   <h1>Trick-or-Treat Bingo 2026</h1>
   <p class="sub">Welcome to The Wedge Trick-or-Treat Bingo! Enter your name and email to get started. Each card is one-of-a-kind, so no two trick-or-treaters will get the same board!</p>
-  <p class="sub">When you spot a square, add the address of the house that matches the description. One card per person, but you can rack up multiple bingos. Make your porch stops count and happy hunting!</p>
+  <p class="sub">Tap a square when you spot it. One card per person, but you can rack up multiple bingos. When you submit, you'll upload photos as proof in the form. Make your porch stops count and happy hunting!</p>
 
   <div id="entryPanel" class="card-panel">
     <label for="nameInput">Your name</label>
@@ -191,8 +179,6 @@
   </div>
 
 </div>
-
-<div id="modalRoot"></div>
 
 <script>
 const ITEMS = [
@@ -290,7 +276,6 @@ const playerLine = document.getElementById('playerLine');
 const marksNote = document.getElementById('marksNote');
 const lockedBanner = document.getElementById('lockedBanner');
 const submitBtn = document.getElementById('submitBtn');
-const modalRoot = document.getElementById('modalRoot');
 
 document.getElementById('startBtn').addEventListener('click', startGame);
 
@@ -345,47 +330,22 @@ function renderGrid(){
     if (litCells.has(i)) cell.classList.add('bingo-line');
     cell.textContent = label;
     if (i !== 12 && !state.submitted) {
-      cell.addEventListener('click', () => openAddressModal(i, label));
+      cell.addEventListener('click', () => toggleSquare(i));
     }
     grid.appendChild(cell);
   });
 
   const markedCount = Object.keys(state.marks).length;
-  marksNote.textContent = `${markedCount} of 24 squares logged.`;
+  marksNote.textContent = `${markedCount} of 24 squares checked.`;
 }
 
-function openAddressModal(index, label){
-  const existingAddr = state.marks[index] || '';
-  modalRoot.innerHTML = `
-    <div class="modal-backdrop" id="backdrop">
-      <div class="modal">
-        <p class="modal-title">${existingAddr ? 'Edit' : 'Log'} this square</p>
-        <p>${label}</p>
-        <label for="addrInput">Street address where you spotted it</label>
-        <input type="text" id="addrInput" placeholder="e.g. 214 Oak Ave" value="${existingAddr.replace(/"/g,'&quot;')}">
-        <div class="modal-actions">
-          <button class="btn ghost small" id="cancelBtn">Cancel</button>
-          ${existingAddr ? '<button class="btn ghost small" id="clearBtn">Clear</button>' : ''}
-          <button class="btn small" id="saveBtn" style="flex:1;">Save</button>
-        </div>
-      </div>
-    </div>
-  `;
-  document.getElementById('cancelBtn').onclick = () => modalRoot.innerHTML = '';
-  document.getElementById('backdrop').onclick = (e) => { if (e.target.id === 'backdrop') modalRoot.innerHTML = ''; };
-  const clearBtn = document.getElementById('clearBtn');
-  if (clearBtn) clearBtn.onclick = () => {
+function toggleSquare(index){
+  if (state.marks[index]) {
     delete state.marks[index];
-    modalRoot.innerHTML = '';
-    renderGrid();
-  };
-  document.getElementById('saveBtn').onclick = () => {
-    const val = document.getElementById('addrInput').value.trim();
-    if (!val) { alert('Enter the street address.'); return; }
-    state.marks[index] = val;
-    modalRoot.innerHTML = '';
-    renderGrid();
-  };
+  } else {
+    state.marks[index] = true;
+  }
+  renderGrid();
 }
 
 submitBtn.addEventListener('click', () => {
@@ -395,11 +355,11 @@ submitBtn.addEventListener('click', () => {
     alert('Log at least one square before submitting.');
     return;
   }
-  if (!confirm("This opens Google's submission form in a new tab with your answers pre-filled. You still need to click Submit there — that's what actually records your entry and enforces one response per person. Continue?")) return;
+  if (!confirm("This opens Google's submission form in a new tab with your answers pre-filled. You still need to upload your photos and click Submit there — that's what actually records your entry and enforces one response per person. Continue?")) return;
 
   const { count } = countBingos(state.marks);
-  const addressesText = state.card
-    .map((label, i) => (i !== 12 && state.marks[i]) ? `${label} — ${state.marks[i]}` : null)
+  const squaresText = state.card
+    .map((label, i) => (i !== 12 && state.marks[i]) ? label : null)
     .filter(Boolean)
     .join('\n');
 
@@ -407,7 +367,7 @@ submitBtn.addEventListener('click', () => {
   params.set('usp', 'pp_url');
   params.set(ENTRY.name, state.name);
   params.set(ENTRY.bingoCount, String(count));
-  params.set(ENTRY.addresses, addressesText);
+  params.set(ENTRY.addresses, squaresText);
 
   window.open(`${FORM_BASE}?${params.toString()}`, '_blank');
 
